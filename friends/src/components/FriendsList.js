@@ -7,15 +7,22 @@ import { axiosWithAuth } from '../api/axiosAuth';
 
 const FriendsList = () => {
 
+
     let styles = {
         margin: '20px',
         padding: '20px',
         width: '1000px',
         height: '180px',
-        backgroundColor: '#88CCFF',
+        backgroundColor: '#665b8c',
       };
 
     const [friendArray, setFriendArray] = useState([]);
+    const [friendState, setFriendState] = useState({
+        newName: '',
+        newAge: '',
+        newEmail: ''
+      })
+
 
     useEffect(() => {
         axiosWithAuth().get('http://localhost:5000/api/friends')
@@ -26,23 +33,74 @@ const FriendsList = () => {
 
       }, []);
 
-    // function loadFriends() {
 
-    //         console.log('friendArray from loadFriends', friendArray);
+      const handleChangesName = e => {
+        setFriendState({
+            ...friendState,
+          newName: e.target.value
+        });
+        console.log('Name: ',friendState.newName);
+      };
+    
+      const handleChangesAge = e => {
+        setFriendState({
+            ...friendState, 
+          newAge: e.target.value
+        });
+        console.log('Age: ',friendState.newAge);
+    
+      };
+    
+      const handleChangesEmail = e => {
+        setFriendState({ 
+            ...friendState,
+          newEmail: e.target.value
+        });
+        console.log('Email: ',friendState.newEmail);
+    
+      };
 
-    //         var result = friendArray.map(item => (
-    //             <div className="friend">
-    //             <h2>{item.name}</h2>
-    //             <h3>Age: {item.age}</h3>
-    //             <h3>Email: {item.email}</h3>
-    //             </div>
-    //         ))
-    //         return result
-    // }
+      const handleAddFriend = e => {
+        e.preventDefault();
+        console.log('add friend', friendState.newName, friendState.newAge, friendState.newEmail)
+        const newFriend = {
+            name: friendState.newName,
+            age: friendState.newAge,
+            email: friendState.newEmail
+        }
+        axiosWithAuth().post('http://localhost:5000/api/friends', newFriend)
+        .then(res => {
+            console.log('updated friendlist res with auth', res);
+            setFriendArray(res.data)
+    })
+
+    };
+
 
     return (
     <div className='app'>
         <h1>Friend List</h1>
+        <div className='input'>
+        <input
+          type="text"
+          value={friendState.newName}
+          onChange={handleChangesName}
+          placeholder="name"
+        />
+        <input
+          type="text"
+          value={friendState.newAge}
+          onChange={handleChangesAge}
+          placeholder="age"
+        />
+        <input
+          type="text"
+          value={friendState.newEmail}
+          onChange={handleChangesEmail}
+          placeholder="email"
+        />
+        <button onClick={handleAddFriend}>Add Friend</button>
+        </div>
         <div className='content'>
         {friendArray.map(item=>(
             <div className='friend-item' style={styles}>
