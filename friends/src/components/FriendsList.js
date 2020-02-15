@@ -11,7 +11,7 @@ const FriendsList = () => {
     let styles = {
         margin: '20px',
         padding: '20px',
-        width: '1000px',
+        width: '400x',
         height: '180px',
         backgroundColor: '#665b8c',
       };
@@ -76,6 +76,18 @@ const FriendsList = () => {
 
     };
 
+    const handleRemoveFriend = (id) => {
+        const urlDelete = 'http://localhost:5000/api/friends/'+id ;
+        console.log('remove friend', urlDelete);
+
+        axiosWithAuth().delete(urlDelete)
+        .then(res => {
+            console.log('updated after delete friendlist', res);
+            setFriendArray(res.data)
+    })
+
+    };
+
 
     return (
     <div className='app'>
@@ -107,6 +119,7 @@ const FriendsList = () => {
             <h2>Name: {item.name}</h2>
             <h3>Age: {item.age}</h3>
             <h3>Email: {item.email}</h3>
+            <a href="#" onClick={() => handleRemoveFriend(item.id)} className="myButton">DELETE</a>
             </div>
         ))}
         </div>

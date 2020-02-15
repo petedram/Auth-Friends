@@ -13,14 +13,11 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <ul>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/protected">Protected Page</Link>
-          </li>
-        </ul>
+
+            <div><Link to="/login">Login</Link></div>
+
+            <div><Link to="/protected">Protected Page</Link></div>
+
         <Switch>
           <ProtectedRoute exact path="/protected" component={FriendList} />
           <Route exact path="/login" component={Login} />
